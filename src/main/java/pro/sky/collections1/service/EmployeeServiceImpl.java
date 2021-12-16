@@ -1,6 +1,7 @@
 package pro.sky.collections1.service;
 
 import org.springframework.stereotype.Service;
+import pro.sky.collections1.DataMatchException;
 import pro.sky.collections1.Employee;
 import pro.sky.collections1.NotFoundException;
 import pro.sky.collections1.OverflowArrayException;
@@ -11,11 +12,14 @@ import java.util.List;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
-    List employee = new ArrayList();
+    List<Employee> employee = new ArrayList<>();
 
     @Override
     public String addEmployeeToList(String firstName, String lastName) {
         Employee employee1 = new Employee(firstName, lastName);
+        if (employee.contains(employee1)) {
+            throw new DataMatchException();
+        }
         employee.add(employee1);
         return (employee1.toString());
     }
