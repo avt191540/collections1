@@ -17,4 +17,10 @@ public interface EmployeeService {
     List printList();
 
     Employee searchEmployeeDepartmentMinSalary(int department);
+
+    Employee searchEmployeeDepartmentMaxSalary(int department);
+
+    List getAllEmployeesOfDepartment(int department);
+
+    List getEmployeesByDepartments();
 }

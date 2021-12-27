@@ -7,7 +7,9 @@ import pro.sky.collections1.NotFoundException;
 import pro.sky.collections1.OverflowArrayException;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -49,24 +51,34 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         throw new NotFoundException();
     }
-
+    //Поиск сотрудника с максимальной зарплатой в указанном отделе
+    @Override
+    public Employee searchEmployeeDepartmentMaxSalary(int department) {
+        return employee.stream()
+                .filter(e -> e.getDepartment() == department)
+                .max(Comparator.comparing(Employee::getSalary))
+                .orElseThrow(() -> new RuntimeException("Value is null"));
+    }
     //Поиск сотрудника с минимальной зарплатой в указанном отделе
-    public static Employee searchEmployeeDepartmentMinSalary(int department) {
-        int indexEmployee = 0; //Индекс сотрудника
-        if (numberEmployeesDepartment(department) == 0) {
-            System.out.print("Такого отдела нет! ");
-            return null;
-        }
-        double minSalaryDepartment = 0;
-        for (int i = 0; i < employees.length; i++) {
-            if (employees[i] == null) {
-                continue;
-            } else if ((minSalaryDepartment == 0 || employees[i].getSalary() < minSalaryDepartment) && employees[i].getDepartment() == department) {
-                //Если для этого отдела первая не нулевая ячейка массива или зарплата меньше минимальной
-                minSalaryDepartment = employees[i].getSalary();
-                indexEmployee = i;
-            }
-        }
-        return employees[indexEmployee];
-        //Если несколько сотрудников с минимальной з/п, тогда возвращается первый по списку
+    @Override
+    public Employee searchEmployeeDepartmentMinSalary(int department) {
+        return employee.stream()
+                .filter(e -> e.getDepartment() == department)
+                .min(Comparator.comparing(Employee::getSalary))
+                .orElseThrow(() -> new RuntimeException("Value is null"));
+    }
+    //Получение информации о всех сотрудниках указанного отдела
+    @Override
+    public List getAllEmployeesOfDepartment(int department) {
+        return employee.stream()
+                .filter(e -> e.getDepartment() == department)
+                .collect(Collectors.toList());
+    }
+    //Получение информации о сотрудниках по отделам
+    @Override
+    public List getEmployeesByDepartments() {
+        return employee.stream()
+                .sorted(Comparator.comparing(Employee::getDepartment))
+                .collect(Collectors.toList());
+    }
 }

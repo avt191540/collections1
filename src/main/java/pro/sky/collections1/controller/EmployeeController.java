@@ -44,4 +44,21 @@ public class EmployeeController {
     public List print() {
         return (employeeService.printList());
     }
+
+    @GetMapping("/departments/min-salary")
+    public Employee findEmployeeMinSalary(@RequestParam int department) {
+        return (employeeService.searchEmployeeDepartmentMinSalary(department));
+    }
+    @GetMapping("/departments/max-salary")
+    public Employee findEmployeeMaxSalary(@RequestParam int department) {
+        return (employeeService.searchEmployeeDepartmentMaxSalary(department));
+    }
+    @GetMapping("/departments/all")
+    public List allEmployeesOfDepartment(@RequestParam int department) {
+        return (employeeService.getAllEmployeesOfDepartment(department));
+    }
+    @GetMapping("/departments/all-departments")
+    public List employeesByDepartments() {
+        return (employeeService.getEmployeesByDepartments());
+    }
 }
