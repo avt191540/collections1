@@ -8,6 +8,7 @@ import pro.sky.collections1.Employee;
 import pro.sky.collections1.service.EmployeeService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/employee")
@@ -60,5 +61,9 @@ public class EmployeeController {
     @GetMapping("/departments/all-departments")
     public List employeesByDepartments() {
         return (employeeService.getEmployeesByDepartments());
+    }
+    @GetMapping("/departments/all1-departments")
+    public Map employeesByDepartments1() {
+        return (employeeService.getMapEmployeesByDepartments());
     }
 }

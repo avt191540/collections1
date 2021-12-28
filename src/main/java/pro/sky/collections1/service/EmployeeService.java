@@ -3,6 +3,7 @@ package pro.sky.collections1.service;
 import pro.sky.collections1.Employee;
 
 import java.util.List;
+import java.util.Map;
 
 public interface EmployeeService {
 
@@ -23,4 +24,6 @@ public interface EmployeeService {
     List getAllEmployeesOfDepartment(int department);
 
     List getEmployeesByDepartments();
+
+    Map getMapEmployeesByDepartments();
 }

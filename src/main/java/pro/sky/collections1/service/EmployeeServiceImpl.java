@@ -9,6 +9,7 @@ import pro.sky.collections1.OverflowArrayException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -80,5 +81,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employee.stream()
                 .sorted(Comparator.comparing(Employee::getDepartment))
                 .collect(Collectors.toList());
+    }
+    //Получение информации о сотрудниках по отделам - вариант с Map
+    @Override
+    public Map getMapEmployeesByDepartments() {
+        Map<Integer, List<Employee>> map = employee.stream()
+                .collect(Collectors.groupingBy(Employee::getDepartment));
+        return map;
     }
 }
