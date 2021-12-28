@@ -8,6 +8,7 @@ import pro.sky.collections1.Employee;
 import pro.sky.collections1.service.EmployeeService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/employee")
@@ -19,18 +20,21 @@ public class EmployeeController {
     }
 
     @GetMapping("/add")
-    public String add(@RequestParam String firstName, @RequestParam String lastName) {
+    public String add(@RequestParam String firstName, @RequestParam String lastName,
+                      @RequestParam int department, @RequestParam double salary) {
         return ("В списке <Сотрудники> создан сотрудник: "
-                + employeeService.addEmployeeToList(firstName, lastName) + ".");
+                + employeeService.addEmployeeToList(firstName, lastName, department, salary) + ".");
     }
     @GetMapping("/remove")
-    public String remove(@RequestParam String firstName, @RequestParam String lastName) {
+    public String remove(@RequestParam String firstName, @RequestParam String lastName,
+                         @RequestParam int department, @RequestParam double salary) {
         return ("В списке <Сотрудники> удален сотрудник: "
-                + employeeService.removeEmployeeFromList(firstName, lastName));
+                + employeeService.removeEmployeeFromList(firstName, lastName, department, salary));
     }
     @GetMapping("/find")
-    public Employee find(@RequestParam String firstName, @RequestParam String lastName) {
-        return (employeeService.findEmployeeInList(firstName, lastName));
+    public Employee find(@RequestParam String firstName, @RequestParam String lastName,
+                         @RequestParam int department, @RequestParam double salary) {
+        return (employeeService.findEmployeeInList(firstName, lastName, department, salary));
     }
     @GetMapping("/size")
     public String size() {
@@ -40,5 +44,26 @@ public class EmployeeController {
     @GetMapping("/print")
     public List print() {
         return (employeeService.printList());
+    }
+
+    @GetMapping("/departments/min-salary")
+    public Employee findEmployeeMinSalary(@RequestParam int department) {
+        return (employeeService.searchEmployeeDepartmentMinSalary(department));
+    }
+    @GetMapping("/departments/max-salary")
+    public Employee findEmployeeMaxSalary(@RequestParam int department) {
+        return (employeeService.searchEmployeeDepartmentMaxSalary(department));
+    }
+    @GetMapping("/departments/all")
+    public List allEmployeesOfDepartment(@RequestParam int department) {
+        return (employeeService.getAllEmployeesOfDepartment(department));
+    }
+    @GetMapping("/departments/all-departments")
+    public List employeesByDepartments() {
+        return (employeeService.getEmployeesByDepartments());
+    }
+    @GetMapping("/departments/all1-departments")
+    public Map employeesByDepartments1() {
+        return (employeeService.getMapEmployeesByDepartments());
     }
 }

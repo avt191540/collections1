@@ -7,7 +7,10 @@ import pro.sky.collections1.NotFoundException;
 import pro.sky.collections1.OverflowArrayException;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -15,8 +18,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     List<Employee> employee = new ArrayList<>();
 
     @Override
-    public String addEmployeeToList(String firstName, String lastName) {
-        Employee employee1 = new Employee(firstName, lastName);
+    public String addEmployeeToList(String firstName, String lastName, int department, double salary) {
+        Employee employee1 = new Employee(firstName, lastName, department, salary);
         if (employee.contains(employee1)) {
             throw new DataMatchException();
         }
@@ -33,8 +36,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employee;
     }
     @Override
-    public String removeEmployeeFromList(String firstName, String lastName) {
-        Employee employee1 = new Employee(firstName, lastName);
+    public String removeEmployeeFromList(String firstName, String lastName, int department, double salary) {
+        Employee employee1 = new Employee(firstName, lastName, department, salary);
         if (employee.contains(employee1)) {
             employee.remove(employee1);
             return (employee1.toString());
@@ -42,11 +45,48 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new NotFoundException();
     }
     @Override
-    public Employee findEmployeeInList(String firstName, String lastName) {
-        Employee employee1 = new Employee(firstName, lastName);
+    public Employee findEmployeeInList(String firstName, String lastName, int department, double salary) {
+        Employee employee1 = new Employee(firstName, lastName, department, salary);
         if (employee.contains(employee1)) {
             return (employee1);
         }
         throw new NotFoundException();
+    }
+    //Поиск сотрудника с максимальной зарплатой в указанном отделе
+    @Override
+    public Employee searchEmployeeDepartmentMaxSalary(int department) {
+        return employee.stream()
+                .filter(e -> e.getDepartment() == department)
+                .max(Comparator.comparing(Employee::getSalary))
+                .orElseThrow(() -> new RuntimeException("Value is null"));
+    }
+    //Поиск сотрудника с минимальной зарплатой в указанном отделе
+    @Override
+    public Employee searchEmployeeDepartmentMinSalary(int department) {
+        return employee.stream()
+                .filter(e -> e.getDepartment() == department)
+                .min(Comparator.comparing(Employee::getSalary))
+                .orElseThrow(() -> new RuntimeException("Value is null"));
+    }
+    //Получение информации о всех сотрудниках указанного отдела
+    @Override
+    public List getAllEmployeesOfDepartment(int department) {
+        return employee.stream()
+                .filter(e -> e.getDepartment() == department)
+                .collect(Collectors.toList());
+    }
+    //Получение информации о сотрудниках по отделам
+    @Override
+    public List getEmployeesByDepartments() {
+        return employee.stream()
+                .sorted(Comparator.comparing(Employee::getDepartment))
+                .collect(Collectors.toList());
+    }
+    //Получение информации о сотрудниках по отделам - вариант с Map
+    @Override
+    public Map getMapEmployeesByDepartments() {
+        Map<Integer, List<Employee>> map = employee.stream()
+                .collect(Collectors.groupingBy(Employee::getDepartment));
+        return map;
     }
 }
