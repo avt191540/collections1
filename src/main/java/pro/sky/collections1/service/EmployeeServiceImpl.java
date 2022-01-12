@@ -1,10 +1,8 @@
 package pro.sky.collections1.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import pro.sky.collections1.DataMatchException;
-import pro.sky.collections1.Employee;
-import pro.sky.collections1.NotFoundException;
-import pro.sky.collections1.OverflowArrayException;
+import pro.sky.collections1.*;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -19,6 +17,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public String addEmployeeToList(String firstName, String lastName, int department, double salary) {
+        if (!StringUtils.isAlpha(firstName) || !StringUtils.isAlpha(lastName)) {
+            throw new InvalidInputData();
+        } else {
+            firstName = StringUtils.capitalize(firstName);
+            lastName = StringUtils.capitalize(lastName);
+        }
         Employee employee1 = new Employee(firstName, lastName, department, salary);
         if (employee.contains(employee1)) {
             throw new DataMatchException();
@@ -88,5 +92,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         Map<Integer, List<Employee>> map = employee.stream()
                 .collect(Collectors.groupingBy(Employee::getDepartment));
         return map;
+    }
+
+    @Override
+    public boolean checkingInputTextData(String firstName, String lastName) {
+        return false;
     }
 }

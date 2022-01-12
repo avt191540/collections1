@@ -26,4 +26,7 @@ public interface EmployeeService {
     List getEmployeesByDepartments();
 
     Map getMapEmployeesByDepartments();
+
+    boolean checkingInputTextData();
+
 }
