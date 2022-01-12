@@ -17,12 +17,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public String addEmployeeToList(String firstName, String lastName, int department, double salary) {
-        if (!StringUtils.isAlpha(firstName) || !StringUtils.isAlpha(lastName)) {
-            throw new InvalidInputData();
-        } else {
-            firstName = StringUtils.capitalize(firstName);
-            lastName = StringUtils.capitalize(lastName);
-        }
+        firstName = checkingInputTextData(firstName);
+        lastName = checkingInputTextData(lastName);
         Employee employee1 = new Employee(firstName, lastName, department, salary);
         if (employee.contains(employee1)) {
             throw new DataMatchException();
@@ -41,6 +37,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
     @Override
     public String removeEmployeeFromList(String firstName, String lastName, int department, double salary) {
+        firstName = checkingInputTextData(firstName);
+        lastName = checkingInputTextData(lastName);
         Employee employee1 = new Employee(firstName, lastName, department, salary);
         if (employee.contains(employee1)) {
             employee.remove(employee1);
@@ -50,6 +48,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
     @Override
     public Employee findEmployeeInList(String firstName, String lastName, int department, double salary) {
+        firstName = checkingInputTextData(firstName);
+        lastName = checkingInputTextData(lastName);
         Employee employee1 = new Employee(firstName, lastName, department, salary);
         if (employee.contains(employee1)) {
             return (employee1);
@@ -93,9 +93,12 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .collect(Collectors.groupingBy(Employee::getDepartment));
         return map;
     }
-
+    //Проверка вводимого текста (наличие только букв) и установка заглавной первой буквы
     @Override
-    public boolean checkingInputTextData(String firstName, String lastName) {
-        return false;
+    public String checkingInputTextData(String text) {
+        if (!StringUtils.isAlpha(text)) {
+            throw new InvalidInputData();
+        } else text = StringUtils.capitalize(text);
+        return text;
     }
 }

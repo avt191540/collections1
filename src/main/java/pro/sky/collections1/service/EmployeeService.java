@@ -27,6 +27,5 @@ public interface EmployeeService {
 
     Map getMapEmployeesByDepartments();
 
-    boolean checkingInputTextData();
-
+    String checkingInputTextData(String text);
 }
