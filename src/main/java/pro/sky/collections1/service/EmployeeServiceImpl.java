@@ -1,10 +1,8 @@
 package pro.sky.collections1.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import pro.sky.collections1.DataMatchException;
-import pro.sky.collections1.Employee;
-import pro.sky.collections1.NotFoundException;
-import pro.sky.collections1.OverflowArrayException;
+import pro.sky.collections1.*;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -19,6 +17,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public String addEmployeeToList(String firstName, String lastName, int department, double salary) {
+        firstName = checkingInputTextData(firstName);
+        lastName = checkingInputTextData(lastName);
         Employee employee1 = new Employee(firstName, lastName, department, salary);
         if (employee.contains(employee1)) {
             throw new DataMatchException();
@@ -37,6 +37,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
     @Override
     public String removeEmployeeFromList(String firstName, String lastName, int department, double salary) {
+        firstName = checkingInputTextData(firstName);
+        lastName = checkingInputTextData(lastName);
         Employee employee1 = new Employee(firstName, lastName, department, salary);
         if (employee.contains(employee1)) {
             employee.remove(employee1);
@@ -46,6 +48,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
     @Override
     public Employee findEmployeeInList(String firstName, String lastName, int department, double salary) {
+        firstName = checkingInputTextData(firstName);
+        lastName = checkingInputTextData(lastName);
         Employee employee1 = new Employee(firstName, lastName, department, salary);
         if (employee.contains(employee1)) {
             return (employee1);
@@ -88,5 +92,13 @@ public class EmployeeServiceImpl implements EmployeeService {
         Map<Integer, List<Employee>> map = employee.stream()
                 .collect(Collectors.groupingBy(Employee::getDepartment));
         return map;
+    }
+    //Проверка вводимого текста (наличие только букв) и установка заглавной первой буквы
+    @Override
+    public String checkingInputTextData(String text) {
+        if (!StringUtils.isAlpha(text)) {
+            throw new InvalidInputData();
+        } else text = StringUtils.capitalize(text);
+        return text;
     }
 }
